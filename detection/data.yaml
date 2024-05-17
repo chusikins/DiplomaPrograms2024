@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['boxes', 'goal']
+
+roboflow:
+  workspace: saint-petersburg-state-university-2qzn6
+  project: obstacles-and-goals
+  version: 1
+  license: Public Domain
+  url: https://universe.roboflow.com/saint-petersburg-state-university-2qzn6/obstacles-and-goals/dataset/1
