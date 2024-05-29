@@ -1,6 +1,6 @@
 import math
 import heapq
-
+import numpy as np
 
 # Define the Cell class
 class Cell:
@@ -13,8 +13,8 @@ class Cell:
 
 
 # Define the size of the grid
-ROW = 9
-COL = 10
+ROW = 433
+COL = 416
 
 
 # Check if a cell is valid (within the grid)
@@ -61,6 +61,7 @@ def trace_path(cell_details, dest):
     for i in path:
         print("->", i, end=" ")
     print()
+    return path
 
 
 # Implement the A* search algorithm
@@ -126,9 +127,9 @@ def a_star_search(grid, src, dest):
                     cell_details[new_i][new_j].parent_j = j
                     print("The destination cell is found")
                     # Trace and print the path from source to destination
-                    trace_path(cell_details, dest)
+                    traced = trace_path(cell_details, dest)
                     found_dest = True
-                    return
+                    return traced
                 else:
                     # Calculate the new f, g, and h values
                     g_new = cell_details[i][j].g + 1.0

@@ -75,69 +75,70 @@ obstacles_copy = cv2.polylines(obstacles_copy, [box2_bound], True, (255,0,0),2, 
 obstacles_copy = cv2.polylines(obstacles_copy, [toolbox_bound], True, (255,0,0),2, cv2.LINE_AA)
 
 # выводим все на экран
+print(center_x, center_y)
 cv2.imshow("img", img)
 cv2.imshow("black_map", black_map)
 cv2.imshow("obstacles_copy", obstacles_copy)
-
+cv2.waitKey(0)
 
 # строим карту методов отталикивающих потенциалов
 
-fig = plt.figure()
-axe = fig.add_subplot(121, projection='3d')
+# fig = plt.figure()
+# axe = fig.add_subplot(121, projection='3d')
+#
+# dataForX = np.linspace(0, black_map.shape[1], black_map.shape[1])
+# dataForY = np.linspace(0, black_map.shape[0], black_map.shape[0])
+#
+# dataForX, dataForY = np.meshgrid(dataForX, dataForY)
+#
+# # black_map = black_map[:, :, 0]
+# obstacles = (obstacles[:, :, 0] + obstacles[:, :, 1] + obstacles[:, :, 2]) // 3
+# Z = ((dataForX - center_x)**2 + (dataForY - center_y)**2) /1000 + obstacles
+# Z = gaussian_filter(Z, sigma=10)
+#
+# surface = axe.plot_surface(dataForX, dataForY, Z, cmap='inferno', linewidth=0, antialiased=False)
+#
+# fig.colorbar(surface, shrink=0.7, aspect=10)
 
-dataForX = np.linspace(0, black_map.shape[1], black_map.shape[1])
-dataForY = np.linspace(0, black_map.shape[0], black_map.shape[0])
+# axe.set_xlabel('X')
+# axe.set_ylabel('Y')
+# axe.set_zlabel('Z')
 
-dataForX, dataForY = np.meshgrid(dataForX, dataForY)
-
-# black_map = black_map[:, :, 0]
-obstacles = (obstacles[:, :, 0] + obstacles[:, :, 1] + obstacles[:, :, 2]) // 3
-Z = ((dataForX - center_x)**2 + (dataForY - center_y)**2) /1000 + obstacles
-Z = gaussian_filter(Z, sigma=10)
-
-surface = axe.plot_surface(dataForX, dataForY, Z, cmap='inferno', linewidth=0, antialiased=False)
-
-fig.colorbar(surface, shrink=0.7, aspect=10)
-
-axe.set_xlabel('X')
-axe.set_ylabel('Y')
-axe.set_zlabel('Z')
-
-axe.set_title('3D Surface Plot')
-
-gradients = np.gradient(Z)
-print(gradients[0].shape, gradients[1].shape)
-# start = [30, 30]
-# f_start = Z[30, 30]
-# end = [300, 300]
-# f_end = Z[300, 300]
-
-X_1 = [150]
-Y_1 = [120]
-Z_1 = [Z[120, 150]]
-
-for i in range(30):
-    last_x = X_1[-1]
-    last_y = Y_1[-1]
-    # grad = gradients[last_x, last_y]
-    alpha = 100
-    last_x -= int(gradients[1][last_y, last_x] * alpha)
-    last_y -= int(gradients[0][last_y, last_x] * alpha)
-    print(last_x, last_y)
-    X_1.append(last_x)
-    Y_1.append(last_y)
-    Z_1.append(Z[last_x, last_y])
-
-
-print("center: ", center_x, center_y)
-ax1 = fig.add_subplot(122, projection='3d')
-ax1.plot3D(X_1, Y_1, Z_1, color='black', linewidth=5)
+# axe.set_title('3D Surface Plot')
+#
+# gradients = np.gradient(Z)
+# print(gradients[0].shape, gradients[1].shape)
+# # start = [30, 30]
+# # f_start = Z[30, 30]
+# # end = [300, 300]
+# # f_end = Z[300, 300]
+#
+# X_1 = [150]
+# Y_1 = [120]
+# Z_1 = [Z[120, 150]]
+#
+# for i in range(30):
+#     last_x = X_1[-1]
+#     last_y = Y_1[-1]
+#     # grad = gradients[last_x, last_y]
+#     alpha = 100
+#     last_x -= int(gradients[1][last_y, last_x] * alpha)
+#     last_y -= int(gradients[0][last_y, last_x] * alpha)
+#     print(last_x, last_y)
+#     X_1.append(last_x)
+#     Y_1.append(last_y)
+#     Z_1.append(Z[last_x, last_y])
+#
+#
+# print("center: ", center_x, center_y)
+# ax1 = fig.add_subplot(122, projection='3d')
+# ax1.plot3D(X_1, Y_1, Z_1, color='black', linewidth=5)
 # ax1.show()
-
-plt.figure()
-plt.imshow(Z, cmap='hot')
-plt.savefig("heatmap.png")
-plt.show()
+#
+# plt.figure()
+# plt.imshow(Z, cmap='hot')
+# plt.savefig("heatmap.png")
+# plt.show()
 
 
 
@@ -147,15 +148,15 @@ plt.show()
 cv2.imwrite("data/maps/bounding_boxes.jpg", img)
 cv2.imwrite("data/maps/black_map.jpg", black_map)
 
-with open('data/maps/map.pickle', 'wb') as handle:
-    pickle.dump(black_map, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-with open('data/maps/gradients.pickle', 'wb') as handle:
-    pickle.dump(gradients, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-with open('data/maps/gradients_lists.pickle', 'wb') as handle:
-    gradients_lists = [gradients[0].tolist(), gradients[1].tolist()]
-    pickle.dump(gradients_lists, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-with open('data/maps/bounds.pickle', 'wb') as handle:
-    pickle.dump([box1_bound, box2_bound, toolbox_bound], handle, protocol=pickle.HIGHEST_PROTOCOL)
+# with open('data/maps/map.pickle', 'wb') as handle:
+#     pickle.dump(black_map, handle, protocol=pickle.HIGHEST_PROTOCOL)
+#
+# with open('data/maps/gradients.pickle', 'wb') as handle:
+#     pickle.dump(gradients, handle, protocol=pickle.HIGHEST_PROTOCOL)
+#
+# with open('data/maps/gradients_lists.pickle', 'wb') as handle:
+#     gradients_lists = [gradients[0].tolist(), gradients[1].tolist()]
+#     pickle.dump(gradients_lists, handle, protocol=pickle.HIGHEST_PROTOCOL)
+#
+# with open('data/maps/bounds.pickle', 'wb') as handle:
+#     pickle.dump([box1_bound, box2_bound, toolbox_bound], handle, protocol=pickle.HIGHEST_PROTOCOL)
